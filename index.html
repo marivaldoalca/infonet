@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ETEC — Educação Técnica e Profissional</title>
+  <meta name="description" content="Página inicial modelo para ETEC: cursos, unidades, calendário do Vestibulinho e contato. Layout responsivo e acessível." />
+  <meta name="color-scheme" content="light dark" />
+  <meta property="og:title" content="ETEC — Educação Técnica e Profissional" />
+  <meta property="og:description" content="Modelo de página inicial responsiva para apresentar a ETEC, cursos e processo seletivo." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23e11d48'/%3E%3Ctext x='50%' y='56%' font-family='Arial,Helvetica,Sans-Serif' font-size='32' text-anchor='middle' fill='white'%3EE%3C/text%3E%3C/svg%3E"/>
+  <style>
+    /* ====== Design tokens ====== */
+    :root{
+      --bg: #0b0b0e;          /* fundo (dark) */
+      --panel: #121218;       /* painéis */
+      --panel-2: #171724;     /* variação */
+      --text: #e6e6ec;        /* texto */
+      --muted: #a1a1b3;       /* texto secundário */
+      --brand: #e11d48;       /* rosa/vermelho ETEC */
+      --brand-2: #fb7185;     /* claro */
+      --accent: #22d3ee;      /* detalhe */
+      --ok: #10b981;          /* sucesso */
+      --warn: #f59e0b;        /* aviso */
+      --danger:#ef4444;       /* erro */
+      --ring: 0 0 0 3px rgb(34 211 238 / .35);
+      --radius: 14px;
+      --shadow: 0 10px 35px rgba(0,0,0,.35);
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f8fafc; --panel:#ffffff; --panel-2:#f1f5f9; --text:#0f172a; --muted:#475569;
+        --shadow: 0 10px 25px rgba(2,6,23,.08);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font:400 16px/1.6 system-ui,Segoe UI,Roboto,Ubuntu,Helvetica,Arial;color:var(--text);background:radial-gradient(1200px 600px at 10% -20%, rgba(225,29,72,.25), transparent 60%), var(--bg)}
+    a{color:inherit}
+    .container{max-width:1120px;margin-inline:auto;padding:0 18px}
+    .btn{appearance:none;border:none;border-radius:999px;padding:.8rem 1.15rem;cursor:pointer;display:inline-flex;gap:.6rem;align-items:center;font-weight:600;box-shadow:var(--shadow);transition:.2s transform,.2s filter}
+    .btn:active{transform:translateY(1px)}
+    .btn-primary{background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid currentColor}
+    .btn[aria-busy="true"]{filter:saturate(.6);cursor:progress}
+    .chip{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--panel-2);background:color-mix(in oklab,var(--panel),#000 6%);padding:.35rem .6rem;border-radius:999px;font-size:.85rem}
+    /* ====== Header ====== */
+    .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip:focus{left:1rem;top:1rem;width:auto;height:auto;z-index:1000;background:var(--panel);border-radius:999px;padding:.5rem .9rem;box-shadow:var(--shadow)}
+    header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(0,0,0,.45),transparent),color-mix(in srgb,var(--bg),#000 6%);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid color-mix(in oklab, var(--panel-2), #000 10%)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0}
+    .brand{display:flex;align-items:center;gap:.75rem;font-weight:800;letter-spacing:.5px}
+    .brand-mark{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 220deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:white;font-weight:900;box-shadow:var(--shadow)}
+    nav ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
+    nav a{opacity:.9;text-decoration:none;padding:.5rem .7rem;border-radius:10px}
+    nav a:hover, nav a:focus{background:color-mix(in oklab,var(--panel),#000 6%)}
+    .nav-actions{display:flex;align-items:center;gap:.6rem}
+    .menu-btn{display:none}
+    @media (max-width: 860px){
+      .menu-btn{display:inline-flex}
+      nav ul{position:fixed;inset:60px 16px auto 16px;background:var(--panel);padding:14px;border-radius:14px;flex-direction:column;border:1px solid var(--panel-2);box-shadow:var(--shadow);display:none}
+      nav ul.open{display:flex}
+    }
+
+    /* ====== Hero ====== */
+    .hero{position:relative;padding:72px 0 36px}
+    .hero .grid{display:grid;grid-template-columns:1.2fr .9fr;gap:28px;align-items:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.25rem .6rem;border:1px solid color-mix(in oklab,var(--brand),#000 10%);border-radius:999px;color:var(--brand-2);background:color-mix(in oklab,var(--panel),var(--brand) 8%);font-weight:700;font-size:.85rem}
+    h1{font-size:clamp(1.9rem,3.4vw,3rem);line-height:1.15;margin:.75rem 0 .5rem}
+    .lead{font-size:1.05rem;color:var(--muted);max-width:55ch}
+    .hero-ill{aspect-ratio:4/3;border-radius:var(--radius);background:radial-gradient(800px 400px at 100% 0%,rgba(34,211,238,.25),transparent 50%), linear-gradient(160deg, color-mix(in oklab,var(--panel),#000 10%), color-mix(in oklab,var(--panel-2),#000 4%));border:1px solid var(--panel-2);box-shadow:var(--shadow);display:grid;place-items:center;position:relative;overflow:hidden}
+    .hero-ill svg{width:86%;max-width:560px;height:auto;opacity:.95}
+    .hero-cta{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+    @media (max-width: 980px){
+      .hero .grid{grid-template-columns:1fr}
+    }
+
+    /* ====== Sections ====== */
+    section{padding:48px 0}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:18px}
+    h2{font-size:clamp(1.4rem,2.4vw,2rem);margin:0}
+    .kicker{color:var(--muted)}
+    .cards{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{grid-column:span 4;background:var(--panel);border:1px solid var(--panel-2);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .card h3{margin:.2rem 0 .4rem;font-size:1.1rem}
+    .card p{margin:.4rem 0;color:var(--muted)}
+    .card .meta{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+    @media (max-width: 980px){ .card{grid-column:span 6} }
+    @media (max-width: 600px){ .card{grid-column:span 12} }
+
+    /* Cursos - filtros */
+    .toolbar{display:flex;gap:.6rem;flex-wrap:wrap}
+    .toolbar input[type="search"]{flex:1;min-width:220px;padding:.68rem .9rem;border-radius:12px;border:1px solid var(--panel-2);background:var(--panel);color:var(--text)}
+    .toolbar .select{position:relative}
+    .toolbar select{appearance:none;padding:.68rem 2.3rem .68rem .9rem;border-radius:12px;border:1px solid var(--panel-2);background:var(--panel);color:var(--text)}
+    .toolbar .select:after{content:"▾";position:absolute;right:.75rem;top:50%;translate:0 -50%;pointer-events:none}
+
+    /* Timeline */
+    .timeline{display:grid;grid-template-columns:1fr;gap:14px}
+    .timeline li{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+    .dot{width:12px;height:12px;border-radius:999px;background:var(--brand)}
+
+    /* Unidades */
+    .unit{display:flex;gap:12px;align-items:center}
+    .unit .mark{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(90deg,var(--brand),var(--brand-2));color:white;font-weight:900}
+
+    /* Contato */
+    form{display:grid;gap:12px}
+    label{display:grid;gap:6px;font-weight:600}
+    input, textarea{padding:.7rem .9rem;border-radius:12px;border:1px solid var(--panel-2);background:var(--panel);color:var(--text)}
+    textarea{min-height:120px;resize:vertical}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 680px){ .two{grid-template-columns:1fr} }
+
+    /* Footer */
+    footer{padding:32px 0;border-top:1px solid var(--panel-2);background:linear-gradient(180deg,transparent,color-mix(in oklab,var(--panel),#000 6%))}
+
+    /* Utilitários */
+    .muted{color:var(--muted)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media (max-width: 900px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+    .surface{background:var(--panel);border:1px solid var(--panel-2);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .center{text-align:center}
+    .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* Modal */
+    dialog{border:none;border-radius:16px;max-width:580px;width:96%;background:var(--panel);color:var(--text);box-shadow:var(--shadow);border:1px solid var(--panel-2)}
+    dialog::backdrop{background:rgb(0 0 0 / .55)}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .icon-btn{border:none;background:transparent;padding:.4rem;border-radius:10px;cursor:pointer}
+    .icon-btn:hover{background:color-mix(in oklab,var(--panel),#000 6%)}
+
+    /* Back-to-top */
+    #toTop{position:fixed;right:16px;bottom:16px;z-index:40;display:none}
+    #toTop.show{display:inline-flex}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <header>
+    <div class="container nav" role="navigation" aria-label="Principal">
+      <a href="#" class="brand" aria-label="Página inicial da ETEC">
+        <span class="brand-mark" aria-hidden="true">E</span>
+        <span>ETEC<span class="sr-only"> — Educação Técnica</span></span>
+      </a>
+      <nav>
+        <button class="menu-btn btn btn-outline" id="menuBtn" aria-controls="menu" aria-expanded="false">Menu</button>
+        <ul id="menu" aria-label="Seções do site">
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#cursos">Cursos</a></li>
+          <li><a href="#unidades">Unidades</a></li>
+          <li><a href="#vestibulinho">Vestibulinho</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn btn-outline" id="themeBtn" aria-label="Alternar tema">🌓</button>
+        <a class="btn btn-primary" href="#vestibulinho">Inscreva-se</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container grid">
+        <div>
+          <span class="eyebrow">✅ Educação pública de qualidade</span>
+          <h1>ETEC — Educação Técnica e Profissional que transforma vidas</h1>
+          <p class="lead">Rede de Ensino Técnico do Estado de São Paulo, com formação prática, laboratórios modernos e integração com o mundo do trabalho. Conheça nossos cursos e o processo seletivo (Vestibulinho).</p>
+          <div class="hero-cta">
+            <a href="#cursos" class="btn btn-primary">Ver cursos</a>
+            <button class="btn btn-outline" data-open="modalInscricao" aria-haspopup="dialog">Matricule-se</button>
+          </div>
+          <p class="muted" style="margin-top:10px">Parcerias com empresas, projetos integradores e estágios supervisionados.</p>
+        </div>
+        <div class="hero-ill" aria-hidden="true">
+          <!-- Ilustração simples em SVG para não depender de imagens externas -->
+          <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de campus e tecnologia">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#22d3ee" stop-opacity=".35"/>
+                <stop offset="1" stop-color="#e11d48" stop-opacity=".35"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="800" height="500" rx="18" fill="url(#g1)"/>
+            <g fill="none" stroke="#fff" stroke-opacity=".7">
+              <rect x="60" y="120" width="260" height="160" rx="14"/>
+              <rect x="490" y="70" width="220" height="120" rx="14"/>
+              <circle cx="190" cy="350" r="58"/>
+              <rect x="420" y="260" width="320" height="180" rx="18"/>
+              <path d="M320 200 L490 130"/>
+              <path d="M230 350 L420 300"/>
+              <path d="M610 190 L610 260"/>
+            </g>
+            <g fill="#fff" fill-opacity=".9">
+              <rect x="85" y="145" width="60" height="30" rx="6"/>
+              <rect x="170" y="145" width="60" height="30" rx="6"/>
+              <rect x="255" y="145" width="40" height="30" rx="6"/>
+              <rect x="520" y="95" width="50" height="24" rx="5"/>
+              <rect x="580" y="95" width="70" height="24" rx="5"/>
+            </g>
+          </svg>
+          <span class="chip" style="position:absolute;left:14px;bottom:14px">🔒 LGPD e segurança de dados</span>
+          <span class="chip" style="position:absolute;right:14px;top:14px">💼 Empregabilidade</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Sobre a ETEC</h2>
+            <div class="kicker">Formação técnica conectada ao mercado</div>
+          </div>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>Missão</h3>
+            <p>Oferecer educação pública, gratuita e de excelência, com foco em competências técnicas e socioemocionais para inserção e progressão no mundo do trabalho.</p>
+            <div class="meta"><span class="chip">🎯 Qualidade</span><span class="chip">👩‍🏫 Docentes especialistas</span></div>
+          </article>
+          <article class="card">
+            <h3>Metodologia</h3>
+            <p>Aprendizagem baseada em projetos, laboratórios equipados e integração entre teoria e prática, com avaliações formativas e feedback contínuo.</p>
+            <div class="meta"><span class="chip">🧪 Prática</span><span class="chip">🤝 Projetos</span></div>
+          </article>
+          <article class="card">
+            <h3>Diferenciais</h3>
+            <p>Parcerias com empresas, programas de estágio, eventos técnicos, feiras de inovação e apoio à empregabilidade e ao empreendedorismo.</p>
+            <div class="meta"><span class="chip">💼 Estágio</span><span class="chip">🚀 Inovação</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CURSOS -->
+    <section id="cursos">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Cursos</h2>
+            <div class="kicker">Busque por área, turno ou modalidade</div>
+          </div>
+          <div class="toolbar" role="search">
+            <input id="q" type="search" placeholder="Pesquisar curso (ex.: Informática)" aria-label="Pesquisar curso" />
+            <div class="select">
+              <select id="f-turno" aria-label="Filtrar por turno">
+                <option value="">Turno (todos)</option>
+                <option>Matutino</option>
+                <option>Vespertino</option>
+                <option>Noturno</option>
+              </select>
+            </div>
+            <div class="select">
+              <select id="f-modalidade" aria-label="Filtrar por modalidade">
+                <option value="">Modalidade (todas)</option>
+                <option value="integrado">Ensino Médio com Habilitação Técnica</option>
+                <option value="tecnico">Técnico</option>
+                <option value="ead">EaD</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="cards" id="lista-cursos" aria-live="polite">
+          <!-- Cada card de curso recebe data-atributos para filtros -->
+          <article class="card" data-turno="Noturno" data-modalidade="tecnico" data-tags="informática, redes, programação">
+            <h3>Desenvolvimento de Sistemas</h3>
+            <p>Programação, banco de dados, web e mobile. Projetos práticos e integração com o mercado.</p>
+            <div class="meta"><span class="chip">💻 Técnico</span><span class="chip">🌙 Noturno</span></div>
+          </article>
+          <article class="card" data-turno="Matutino" data-modalidade="integrado" data-tags="ti, informática, médio">
+            <h3>Ensino Médio Integrado em Informática</h3>
+            <p>Formação geral + habilitação técnica em Informática. Ideal para iniciar a carreira em TI.</p>
+            <div class="meta"><span class="chip">🎓 Integrado</span><span class="chip">🌤️ Matutino</span></div>
+          </article>
+          <article class="card" data-turno="Vespertino" data-modalidade="tecnico" data-tags="gestão, empresas, adm">
+            <h3>Administração</h3>
+            <p>Processos administrativos, finanças, marketing e empreendedorismo com foco prático.</p>
+            <div class="meta"><span class="chip">🏢 Técnico</span><span class="chip">🌥️ Vespertino</span></div>
+          </article>
+          <article class="card" data-turno="Noturno" data-modalidade="tecnico" data-tags="saúde, hospitalar, enfermagem">
+            <h3>Enfermagem</h3>
+            <p>Assistência em saúde, ética e práticas laboratoriais. Estágio supervisionado.</p>
+            <div class="meta"><span class="chip">🩺 Técnico</span><span class="chip">🌙 Noturno</span></div>
+          </article>
+          <article class="card" data-turno="Noturno" data-modalidade="tecnico" data-tags="logística, cadeias, estoque">
+            <h3>Logística</h3>
+            <p>Gestão de cadeias de suprimentos, armazenagem, transporte e indicadores.</p>
+            <div class="meta"><span class="chip">📦 Técnico</span><span class="chip">🌙 Noturno</span></div>
+          </article>
+          <article class="card" data-turno="EaD" data-modalidade="ead" data-tags="ti, suporte, redes">
+            <h3>Informática para Internet (EaD)</h3>
+            <p>Desenvolvimento web, front-end e back-end, com trilhas autoinstrucionais.</p>
+            <div class="meta"><span class="chip">🌐 EaD</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- UNIDADES -->
+    <section id="unidades">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Unidades</h2>
+            <div class="kicker">Encontre a ETEC mais próxima</div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="surface unit">
+            <div class="mark" aria-hidden="true">A</div>
+            <div>
+              <strong>Unidade Centro</strong>
+              <div class="muted">Endereço: Rua Exemplo, 123 — Cidade/SP</div>
+            </div>
+          </div>
+          <div class="surface unit">
+            <div class="mark" aria-hidden="true">B</div>
+            <div>
+              <strong>Unidade Norte</strong>
+              <div class="muted">Endereço: Av. Modelo, 456 — Cidade/SP</div>
+            </div>
+          </div>
+          <div class="surface unit">
+            <div class="mark" aria-hidden="true">C</div>
+            <div>
+              <strong>Unidade Sul</strong>
+              <div class="muted">Endereço: Praça Referência, 789 — Cidade/SP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VESTIBULINHO -->
+    <section id="vestibulinho">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Vestibulinho</h2>
+            <div class="kicker">Processo seletivo para cursos técnicos e integrados</div>
+          </div>
+          <a class="btn btn-outline" href="#" aria-label="Acessar guia do candidato">Guia do Candidato</a>
+        </div>
+        <div class="grid-2">
+          <div class="surface">
+            <h3>Como funciona</h3>
+            <p class="muted">Inscrição on-line, prova objetiva e classificação por desempenho e vagas. Acompanhe o edital e as datas oficiais.</p>
+            <ul class="timeline">
+              <li><span class="dot" aria-hidden="true"></span><div><strong>Inscrições</strong> — preencha o formulário, escolha a unidade e o curso.</div></li>
+              <li><span class="dot" aria-hidden="true"></span><div><strong>Prova</strong> — conhecimentos gerais e raciocínio lógico.</div></li>
+              <li><span class="dot" aria-hidden="true"></span><div><strong>Classificação</strong> — consulte a lista e siga as orientações de matrícula.</div></li>
+              <li><span class="dot" aria-hidden="true"></span><div><strong>Matrícula</strong> — entrega de documentos e confirmação de vaga.</div></li>
+            </ul>
+          </div>
+          <div class="surface">
+            <h3>Inscreva-se</h3>
+            <p>Use o botão abaixo para abrir o formulário rápido de interesse.</p>
+            <button class="btn btn-primary" data-open="modalInscricao">Quero me inscrever</button>
+            <p class="muted" style="margin-top:10px">*Este é um formulário modelo. Adapte para o sistema oficial de inscrições.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTÍCIAS (placeholders) -->
+    <section id="noticias">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Notícias</h2>
+            <div class="kicker">Acompanhe novidades e eventos</div>
+          </div>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>Feira Tecnológica movimenta comunidade</h3>
+            <p>Estudantes apresentam projetos integradores nas áreas de TI, Gestão e Saúde, com participação de empresas parceiras.</p>
+            <div class="meta"><span class="chip">📅 28/08</span><span class="chip">🚀 Inovação</span></div>
+          </article>
+          <article class="card">
+            <h3>Parceria com empresa local de software</h3>
+            <p>Programa de estágios e visitas técnicas para turmas de Desenvolvimento de Sistemas e Informática para Internet.</p>
+            <div class="meta"><span class="chip">🤝 Parcerias</span></div>
+          </article>
+          <article class="card">
+            <h3>Oficinas de carreira e empregabilidade</h3>
+            <p>Currículo, portfólio e simulações de entrevistas com RHs convidados. Aberto a alunos e egressos.</p>
+            <div class="meta"><span class="chip">💼 Carreira</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Contato</h2>
+            <div class="kicker">Fale com a secretaria acadêmica</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <form class="surface" id="form-contato" novalidate>
+            <div class="two">
+              <label>Nome
+                <input name="nome" required placeholder="Seu nome" />
+              </label>
+              <label>E-mail
+                <input type="email" name="email" required placeholder="seu@email.com" />
+              </label>
+            </div>
+            <label>Assunto
+              <input name="assunto" required placeholder="Dúvida / Solicitação" />
+            </label>
+            <label>Mensagem
+              <textarea name="mensagem" required placeholder="Escreva sua mensagem..."></textarea>
+            </label>
+            <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-primary" type="submit">Enviar</button>
+              <span class="muted" id="msg-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+          <div class="surface">
+            <h3>Informações</h3>
+            <p class="muted">Endereço, telefone e horário de atendimento podem ser ajustados aqui conforme a unidade.</p>
+            <ul>
+              <li>📍 Rua Exemplo, 123 — Cidade/SP</li>
+              <li>☎️ (00) 0000-0000</li>
+              <li>📧 contato@etec.exemplo.br</li>
+              <li>⏰ Seg a Sex — 8h às 21h</li>
+            </ul>
+            <p class="muted">Siga nas redes: <a href="#">YouTube</a> · <a href="#">Instagram</a> · <a href="#">Facebook</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+      <p class="muted">© <span id="year"></span> ETEC — Modelo de página. Personalize com o nome da sua unidade.</p>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span class="chip">🛡️ Acessível</span>
+        <span class="chip">📱 Responsiva</span>
+        <span class="chip">⚡ Leve</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal de Inscrição -->
+  <dialog id="modalInscricao" aria-labelledby="inscTitle">
+    <form method="dialog">
+      <div class="modal-head">
+        <h3 id="inscTitle">Formulário de Interesse</h3>
+        <button class="icon-btn" aria-label="Fechar" value="cancel">✖️</button>
+      </div>
+    </form>
+    <form id="form-inscricao" class="content" style="display:grid;gap:10px" novalidate>
+      <label>Nome completo
+        <input name="nome" required />
+      </label>
+      <label>E-mail
+        <input type="email" name="email" required />
+      </label>
+      <label>Curso de interesse
+        <select name="curso" required>
+          <option value="">Selecione...</option>
+          <option>Desenvolvimento de Sistemas</option>
+          <option>Informática (Integrado)</option>
+          <option>Administração</option>
+          <option>Enfermagem</option>
+          <option>Logística</option>
+          <option>Informática para Internet (EaD)</option>
+        </select>
+      </label>
+      <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-top:6px">
+        <button class="btn btn-primary" type="submit">Enviar interesse</button>
+        <button class="btn btn-outline" type="button" onclick="document.getElementById('modalInscricao').close()">Fechar</button>
+        <span class="muted" id="status-inscricao" role="status" aria-live="polite"></span>
+      </div>
+    </form>
+  </dialog>
+
+  <button id="toTop" class="btn btn-outline" aria-label="Voltar ao topo">↑ Topo</button>
+
+  <script>
+    // ====== Utilidades ======
+    const $ = (q,ctx=document)=>ctx.querySelector(q);
+    const $$ = (q,ctx=document)=>Array.from(ctx.querySelectorAll(q));
+
+    // Ano automático
+    $('#year').textContent = new Date().getFullYear();
+
+    // Menu móvel
+    const menuBtn = $('#menuBtn');
+    const menu = $('#menu');
+    menuBtn?.addEventListener('click', ()=>{
+      const open = menu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+    });
+    // Fecha menu ao clicar em link
+    $$('#menu a').forEach(a=>a.addEventListener('click',()=>menu.classList.remove('open')));
+
+    // Tema claro/escuro (persistência)
+    const themeBtn = $('#themeBtn');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const applyTheme = (t)=>{
+      document.documentElement.dataset.theme = t;
+      if(t==='light') document.documentElement.style.colorScheme='light';
+      else if(t==='dark') document.documentElement.style.colorScheme='dark';
+      else document.documentElement.style.colorScheme='light dark';
+      localStorage.setItem('theme', t);
+    };
+    applyTheme(localStorage.getItem('theme')||'auto');
+    themeBtn?.addEventListener('click', ()=>{
+      const current = localStorage.getItem('theme')||'auto';
+      const next = current==='auto'?'dark': current==='dark'?'light':'auto';
+      applyTheme(next);
+      themeBtn.textContent = (next==='dark'?'🌙': next==='light'?'☀️':'🌓');
+    });
+
+    // Filtro de cursos
+    const q = $('#q');
+    const fTurno = $('#f-turno');
+    const fModal = $('#f-modalidade');
+    const lista = $('#lista-cursos');
+    const aplicaFiltro = ()=>{
+      const termo = (q.value||'').toLowerCase();
+      const turno = fTurno.value;
+      const mod = fModal.value;
+      $$('#lista-cursos .card').forEach(card=>{
+        const tags = (card.dataset.tags||'').toLowerCase();
+        const matchTexto = !termo || card.textContent.toLowerCase().includes(termo) || tags.includes(termo);
+        const matchTurno = !turno || card.dataset.turno===turno;
+        const matchMod   = !mod   || card.dataset.modalidade===mod;
+        card.style.display = (matchTexto && matchTurno && matchMod) ? '' : 'none';
+      });
+      lista.setAttribute('aria-busy','false');
+    }
+    ;[q,fTurno,fModal].forEach(el=>el.addEventListener('input',()=>{lista.setAttribute('aria-busy','true');window.requestAnimationFrame(aplicaFiltro)}));
+
+    // Smooth scroll para âncoras
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]');
+      if(!a) return;
+      const id = a.getAttribute('href');
+      const el = document.querySelector(id);
+      if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+
+    // Back-to-top
+    const toTop = $('#toTop');
+    const onScroll = ()=>{
+      if(window.scrollY > 600) toTop.classList.add('show'); else toTop.classList.remove('show');
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    toTop.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Modal de inscrição
+    const modal = $('#modalInscricao');
+    document.querySelectorAll('[data-open="modalInscricao"]').forEach(b=>b.addEventListener('click',()=>modal.showModal()));
+
+    // Validação e feedback dos formulários (mock)
+    const formContato = $('#form-contato');
+    formContato?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const ok = formContato.checkValidity();
+      if(!ok){ formContato.reportValidity(); return; }
+      const btn = formContato.querySelector('button[type="submit"]');
+      const msg = $('#msg-status');
+      btn.setAttribute('aria-busy','true');
+      msg.textContent = 'Enviando...';
+      setTimeout(()=>{ btn.removeAttribute('aria-busy'); msg.textContent = 'Mensagem enviada! (simulação)'; }, 900);
+    });
+
+    const formInsc = $('#form-inscricao');
+    formInsc?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(!formInsc.checkValidity()){ formInsc.reportValidity(); return; }
+      const status = $('#status-inscricao');
+      status.textContent = 'Enviando...' ;
+      setTimeout(()=>{ status.textContent = 'Interesse registrado! Em breve entraremos em contato.'; }, 900);
+    });
+
+    // Atalho: focar busca de cursos com tecla '/'
+    window.addEventListener('keydown', (e)=>{
+      if(e.key==='/' && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA'){
+        e.preventDefault(); q.focus();
+      }
+    });
+  </script>
+</body>
+</html>
